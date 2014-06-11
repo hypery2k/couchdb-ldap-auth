@@ -20,6 +20,7 @@ First, check out the source and `cd` into it.
 ### Build from Source
 
 ```
+rebar get-deps
 rebar clean compile
 ```
 
@@ -33,15 +34,21 @@ rebar test
 
 ```
 # Create module folder
-mkdir /usr/local/lib/couchdb/erlang/lib/ldap-auth
+
+# maybe /usr/lib/x86_64-linux-gnu/couchdb/erlang/lib (use ```find / -name couchdb```)
+export LIB_COUCH=/usr/local/lib/couchdb/erlang/lib
+# maybe /etc/couchdb/default.d/
+export ETC_COUCH=/usr/local/etc/couchdb
+mkdir ${LIB_COUCH}/ldap-auth
+
 # Copy binaries
-cp -R ebin /usr/local/lib/couchdb/erlang/lib/ldap-auth/
+cp -R ebin /usr/local/lib/couchdb/erlang/lib/ldap-auth/ 
 
 # Copy/overwrite the default config
-cp -f priv/default.d/* /usr/local/etc/couchdb/default.d/
+cp -f priv/default.d/* ${ETC_COUCH}/default.d/ 
 
 # Copy (but don't overwrite!) the custom config
-cp -n priv/local.d/* /usr/local/etc/couchdb/local.d/
+cp -n priv/local.d/* ${ETC_COUCH}/local.d/
 ```
 
 ## Configuration
