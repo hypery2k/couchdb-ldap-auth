@@ -42,7 +42,7 @@ export ETC_COUCH=/usr/local/etc/couchdb
 mkdir ${LIB_COUCH}/ldap-auth
 
 # Copy binaries
-cp -R ebin /usr/local/lib/couchdb/erlang/lib/ldap-auth/ 
+cp -R ebin ${LIB_COUCH}/ldap-auth
 
 # Copy/overwrite the default config
 cp -f priv/default.d/* ${ETC_COUCH}/default.d/ 
