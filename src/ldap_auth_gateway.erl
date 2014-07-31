@@ -34,7 +34,7 @@ authenticate(LdapConnection, User, Password) ->
 get_user_dn(LdapConnection, User) when User =/= <<"">>, User =/= "" ->
   [UserDNMapAttr] = get_config(["UserDNMapAttr"]),
 
-  case query(LdapConnection, "person", eldap:equalityMatch(UserDNMapAttr, User)) of
+  case record(LdapConnection, "person", eldap:equalityMatch(UserDNMapAttr, User)) of
     [] ->
       ?LOG_INFO("Could not find user with ~s = ~p to authenticate.", [UserDNMapAttr, User]),
       { error, invalid_credentials };
@@ -60,7 +60,7 @@ connect(DN, Password) ->
       end
   end.
 
-query(LdapConnection, Type, Filter) ->
+record(LdapConnection, Type, Filter) ->
   [BaseDN] = get_config(["BaseDN"]),
   TypedFilter = eldap:'and'([eldap:equalityMatch("objectClass", Type), Filter]),
   case eldap:search(LdapConnection, [{ base, BaseDN }, { filter, TypedFilter }]) of
@@ -74,7 +74,7 @@ get_group_memberships(LdapConnection, UserDN) ->
 
 get_group_memberships(LdapConnection, Memberships, DN) ->
   [GroupDNMapAttr] = get_config(["GroupDNMapAttr"]),
-  case query(LdapConnection, "group", eldap:equalityMatch("member", DN)) of
+  case record(LdapConnection, "group", eldap:equalityMatch("member", DN)) of
     [] -> Memberships;
     Entries ->
       ParentGroupDNs = [
